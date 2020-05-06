@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  color: white;
+  background-color: grey;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 2vw;
+  text-shadow: 0 0.2vw 0.4vw #333;
+  margin: 0;
+}
+#all {
+  height: 100vh;
+  padding: 2vw;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+#mainArea {
+  flex-grow: 1;
+  display: flex;
+}
+#info {
+  flex-basis: 50%;
+  font-size: 3vw;
+}
+#title {
+  font-size: 4vw;
+  margin-left: 6vw;
+  margin-right: 1vw;
+  margin-top: 8vh;
+  margin-bottom: 4vh;
+}
+td {
+  padding: 1vw;
+}
+.icon {
+  width: 4vw;
+}
+#number {
+  text-align: center;
+}
+#logo {
+  position: absolute;
+  left: 20vw;
+  bottom: 20vh;
+  opacity: 0.3;
+  z-index: -1;
+}
+.albumImage {
+  flex-shrink: 0;
+  width: auto;
+  height: auto;
+  margin: auto;
+  max-width: 60vw;
+  max-height: 82vh;
+  box-shadow: 0 0.2vw 0.4vw #333;
+}
+.albumImagePlaceholder {
+  width: 30vw;
+  margin: auto 5vw;
+}
+#progressRow {
+  margin: 2vh 0;
+  display: flex;
+  align-items: center;
+}
+#timeElapsed, #timeTotal {
+  width: 6ch;
+  margin: 0 0.5ch;
+}
+#timeElapsed {
+  text-align: right;
+}
+progress {
+  flex-grow: 1;
+  background: grey;
+}
+progress::-webkit-progress-bar {
+  background: dimgrey;
+  box-shadow: 0 0.2vw 0.4vw #555 inset;
+  border-radius: 9px;
+}
+progress::-webkit-progress-value {
+  background: steelblue;
+  background-image: linear-gradient(#fff2, #0002);
+  border-radius: 9px;
+}
+#file {
+  text-align: center;
+}
+</style>
+</head>
+
+<body>
+<div id="all">
+  <div id="mainArea">
+    <div id="info">
+      <div id="title"></div>
+      <table>
+        <tr>
+          <td><img class="icon" src="artist.svg"></td>
+          <td id="artist"></td>
+        </tr>
+        <tr>
+          <td><img class="icon" src="album.svg"></td>
+          <td id="album"></td>
+        </tr>
+        <tr>
+          <td id="number">#</td>
+          <td id="track"></td>
+        </tr>
+      </table>
+      <img id="logo" src="logo.svg">
+    </div>
+    
+    <img id="albumImage" class="albumImagePlaceholder" src="albumImagePlaceholder.svg">
+  </div>
+  
+  <div id="progressRow">
+    <div id="timeElapsed">0:00</div>
+    <progress value="0"></progress>
+    <div id="timeTotal">0:00</div>
+  </div>
+  
+  <div id="file"></div>
+</div>
+</body>
+</html>
