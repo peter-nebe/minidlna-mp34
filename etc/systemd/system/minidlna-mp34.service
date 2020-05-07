@@ -7,7 +7,7 @@ Type=simple
 User=minidlna
 Group=minidlna
 Environment=QT_QPA_PLATFORM=offscreen
-ExecStart=/usr/local/bin/minidlna-mp34 -S -f /usr/local/etc/minidlna-mp34.conf -P /run/minidlna/minidlna-mp34.pid
+ExecStart=/usr/bin/minidlna-mp34 -S -f /etc/minidlna-mp34/minidlna-mp34.conf -P /run/minidlna/minidlna-mp34.pid
 
 [Install]
 WantedBy=multi-user.target

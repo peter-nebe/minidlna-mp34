@@ -1,4 +1,4 @@
 sudo -u minidlna \
 QT_QPA_PLATFORM=offscreen \
 QT_DEBUG_PLUGINS=1 \
-minidlna-mp34 -d -f /usr/local/etc/minidlna-mp34.conf -P /run/minidlna/minidlna-mp34.pid
+minidlna-mp34 -d -f /etc/minidlna-mp34/minidlna-mp34.conf -P /run/minidlna/minidlna-mp34.pid

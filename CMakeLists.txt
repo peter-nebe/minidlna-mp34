@@ -2,14 +2,14 @@ cmake_minimum_required (VERSION 3.17)
 project (minidlna-mp34)
 
 set (project_SRC
-  minidlna.c
-  scanner.c
-  upnpglobalvars.c
-  upnphttp.c
-  upnpsoap.c
+  src/minidlna.c
+  src/scanner.c
+  src/upnpglobalvars.c
+  src/upnphttp.c
+  src/upnpsoap.c
 )
 set (minidlna_DIR
-  ../../minidlna-1.2.1
+  ../minidlna-1.2.1
 )
 set (minidlna_SRC
   ${minidlna_DIR}/albumart.c
@@ -60,31 +60,24 @@ add_executable (
 include (
   GNUInstallDirs
 )
-set (DATA_DIR
-  ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}
-)
 set (DATA_PATH
-  ${CMAKE_INSTALL_PREFIX}/${DATA_DIR}
+  ${CMAKE_INSTALL_FULL_DATADIR}/${PROJECT_NAME}
 )
 configure_file (
-  config_mp34.h.in
-  config_mp34.h
+  src/config_mp34.h.in
+  src/config_mp34.h
 )
 install (
   TARGETS ${PROJECT_NAME}
 )
 install (
-  FILES "../Conversion Info.mp4"
-  DESTINATION ${DATA_DIR}
-)
-install (
-  FILES ../minidlna-mp34.conf
+  DIRECTORY etc/${PROJECT_NAME} etc/systemd
   TYPE SYSCONF
 )
 install (
-  FILES ../minidlna-mp34.service
-  DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/systemd/system
+  FILES "Conversion Info.mp4"
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}
 )
 install (
-  SCRIPT install_include.cmake
+  SCRIPT post_install.cmake
 )
