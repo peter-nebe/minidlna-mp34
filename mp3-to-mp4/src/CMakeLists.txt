@@ -63,11 +63,8 @@ add_executable (
 include (
   GNUInstallDirs
 )
-set (DATA_DIR
-  ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}
-)
 set (DATA_PATH
-  ${CMAKE_INSTALL_PREFIX}/${DATA_DIR}
+  ${CMAKE_INSTALL_FULL_DATADIR}/${PROJECT_NAME}
 )
 configure_file (
   config_mp34.h.in
@@ -78,5 +75,5 @@ install (
 )
 install (
   DIRECTORY ../playerTemplate
-  DESTINATION ${DATA_DIR}
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}
 )
