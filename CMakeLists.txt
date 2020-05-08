@@ -73,6 +73,7 @@ install (
 install (
   DIRECTORY etc/${PROJECT_NAME} etc/systemd
   TYPE SYSCONF
+  USE_SOURCE_PERMISSIONS
 )
 install (
   FILES "Conversion Info.mp4"
