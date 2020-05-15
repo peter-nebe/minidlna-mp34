@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  color: white;
+  background-color: #222;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 1vw;
+  margin: 0;
+}
+#all {
+  height: 100vh;
+  padding: calc((1080 - 1024) / 1080 * 50vh);
+  box-sizing: border-box;
+  display: flex;
+}
+.side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.info {
+  flex: 1;
+}
+#title {
+  font-size: 1.5vw;
+}
+.desig {
+  color: grey;
+  margin-top: 0.5em;
+}
+#progressBox {
+  width: 98%;
+}
+progress {
+  width: 100%;
+  background: #222;
+}
+progress::-webkit-progress-bar {
+  background: black;
+  border-radius: 7px;
+}
+progress::-webkit-progress-value {
+  background: darkblue;
+  background-image: linear-gradient(#fff4, #0004);
+  border-radius: 7px;
+}
+#timeTotal {
+  float: right;
+}
+.albumImage {
+  width: calc(1024 / 1920 * 100vw);
+  height: auto;
+  margin: auto;
+}
+.file {
+  color: grey;
+  padding-left: 2ch;
+}
+.currentFile {
+  background-color: #444;
+  padding-left: 0.5ch;
+  display: list-item;
+  list-style-position: inside;
+}
+#logo {
+  width: 10vw;
+  align-self: flex-end;
+  opacity: 0.3;
+  z-index: -1;
+}
+</style>
+</head>
+
+<body>
+<div id="all">
+  <div class="side">
+    <div class="info">
+      <div id="title"></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+      <div class="desig"></div><div></div>
+    </div>
+    <div id="progressBox">
+      <progress value="0"></progress>
+      <span id="timeElapsed">0:00</span>
+      <span id="timeTotal">0:00</span>
+    </div>
+  </div>
+    
+  <img class="albumImage" id="albumImage">
+  
+  <div class="side">
+    <div class="info" id="fileList">
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+      <div class="file"></div>
+    </div>
+    <img id="logo" src="logo.svg">
+  </div>
+</div>
+</body>
+</html>

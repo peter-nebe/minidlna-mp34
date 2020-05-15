@@ -44,23 +44,28 @@ int get_nb_output_streams()
   return nb_output_streams;
 }
 
-void get_mp3_metadata(MetadataPod *mp)
+void get_mp3_metadata(MetadataTags *mt)
 {
   if(nb_input_files < 1 || input_files == NULL || input_files[0] == NULL || input_files[0]->ctx == NULL)
     return;
-
   AVFormatContext *fmt_ctx = input_files[0]->ctx;
+
+  const int count = av_dict_count(fmt_ctx->metadata);
+  if(count <= 0)
+    return;
+  mt->tags = malloc(count * sizeof *mt->tags);
+  if(!mt->tags)
+    return;
+  mt->tagsCount = count;
+
+  size_t i = 0;
   AVDictionaryEntry *tag = NULL;
   while((tag = av_dict_get(fmt_ctx->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)))
   {
-    if(strcmp("title", tag->key) == 0)
-      mp->title = tag->value;
-    else if(strcmp("artist", tag->key) == 0)
-      mp->artist = tag->value;
-    else if(strcmp("album", tag->key) == 0)
-      mp->album = tag->value;
-    else if(strcmp("track", tag->key) == 0)
-      mp->track = atoi(tag->value);
+    mt->tags[i].key = tag->key;
+    mt->tags[i].value = tag->value;
+    if(++i >= mt->tagsCount)
+      break;
   }
 }
 

@@ -24,7 +24,6 @@
 #include "ffmpegAdapter.h"
 #include "ffmpeg/ffmpeg_lib.h" // rawvideoUrlDummy
 #include <filesystem>
-#include <set>
 #include <sstream>
 #include <fstream>
 using namespace std;
@@ -38,8 +37,19 @@ int MpxTool::convert(const string &input)
     return 1;
   }
 
-  const int ret = fs::is_directory(input) ? convertFolder(input)
-                                          : convertFile(input);
+  currentMp3FileIndex = 0;
+  mp3Files.clear();
+
+  int ret = 0;
+  if(fs::is_directory(input))
+  {
+    ret = convertFolder(input);
+  }
+  else
+  {
+    mp3Files.insert(input);
+    ret = convertFile(input);
+  }
   Rendering::instance().cleanup();
 
   return ret;
@@ -50,24 +60,28 @@ int MpxTool::convertFolder(const string &folder)
   int retval = 0;
   loginfo << "converting folder " << quoted(folder) << "..." << endl;
 
-  set<string> files;
   for(const auto &entry : fs::directory_iterator(folder))
   {
     if(entry.path().extension() == ".mp3")
-      files.insert(entry.path());
+      mp3Files.insert(entry.path());
   }
 
   mp4Files.clear();
-  mp4Files.reserve(files.size());
+  mp4Files.reserve(mp3Files.size());
 
-  for(const auto &file : files)
+  for(const auto &file : mp3Files)
   {
     const int err = convertFile(file);
     if(err)
       retval = err;
+    ++currentMp3FileIndex;
   }
 
-  const int err = concatenate((--fs::path(folder).end())->string() + ".mp4");
+  fs::path::iterator last = --fs::path(folder).end();
+  if(folder.back() == '/')
+    --last;
+
+  const int err = concatenate(last->string() + ".mp4");
   if(err)
     retval = err;
 
@@ -81,6 +95,12 @@ int MpxTool::convertFile(const string &mp3File)
   loginfo << "converting file " << quoted(mp3File) << "..." << endl;
 
   Mp3Metadata metadata = extractMetadata(mp3File);
+
+  metadata.fileList.reserve(mp3Files.size());
+  for(const auto &file : mp3Files)
+    metadata.fileList.push_back(fs::path(file).filename());
+  metadata.currentFileIndex = currentMp3FileIndex;
+
   Rendering::instance().startRenderPiece(move(metadata));
 
   const int err = convertToMp4(mp3File);
@@ -92,7 +112,6 @@ int MpxTool::convertFile(const string &mp3File)
 Mp3Metadata MpxTool::extractMetadata(const string &mp3File) const
 {
   Mp3Metadata mm;
-  mm.file = fs::path(mp3File).filename();
   mm.duration = getDuration(mp3File);
 
   const string albumImageFile = extractAlbumImage(mp3File);
@@ -101,8 +120,11 @@ Mp3Metadata MpxTool::extractMetadata(const string &mp3File) const
 
   FfmpegAdapter::getMp3Metadata(mm);
 
-  if(mm.title.empty())
-    mm.title = fs::path(mm.file).stem();
+  if(!mm.title)
+  {
+    mm.title = mm.tags.size();
+    mm.tags.push_back(make_pair("title", fs::path(mp3File).stem()));
+  }
 
   return mm;
 }

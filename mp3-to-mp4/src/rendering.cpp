@@ -27,7 +27,7 @@ namespace
 const size_t _width = 1920;
 const size_t _height = 1080;
 const size_t _bytesPerPixel = 4; // ARGB
-const std::string stopDummy = "$stopDummy$";
+const size_t _stopDummy = -1;
 
 class QtApp
 {
@@ -114,7 +114,7 @@ void Rendering::cleanup()
 {
   piece.reset();
   jobFifo.clear();
-  jobFifo.push(Mp3Metadata{ .title = stopDummy });
+  jobFifo.push(Mp3Metadata{ .title = _stopDummy });
 
   if(thread.joinable())
     thread.join();
@@ -127,7 +127,7 @@ void Rendering::threadFunc()
   while(true)
   {
     const Mp3Metadata metadata = jobFifo.pop();
-    if(metadata.title == stopDummy)
+    if(metadata.title == _stopDummy)
       break;
 
     piece.render(metadata);

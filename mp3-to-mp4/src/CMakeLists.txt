@@ -74,6 +74,6 @@ install (
   TARGETS ${PROJECT_NAME}
 )
 install (
-  DIRECTORY ../playerTemplate
+  DIRECTORY ../playerTemplate "../playerTemplate (alternative)"
   DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}
 )

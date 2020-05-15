@@ -22,7 +22,7 @@
 #define MPXTOOL_H_
 
 #include "mp3Metadata.h"
-#include <vector>
+#include <set>
 
 class MpxTool
 {
@@ -38,6 +38,8 @@ private:
   std::string extractAlbumImage(const std::string &mp3File) const;
   int concatenate(const std::string &outMp4File) const;
 
+  size_t currentMp3FileIndex{};
+  std::set<std::string> mp3Files;
   std::vector<std::string> mp4Files;
 };
 

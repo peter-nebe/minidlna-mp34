@@ -22,16 +22,36 @@
 #define MP3METADATA_H_
 
 #include <string>
+#include <vector>
 
 struct Mp3Metadata
 {
-  std::string title;
-  std::string artist;
-  std::string album;
+  size_t title{};
+  size_t artist{};
+  size_t album{};
   size_t track{};
   size_t duration{};
-  std::string file;
   std::string albumImageFile;
+  std::vector<std::pair<std::string, std::string>> tags;
+  std::vector<std::string> fileList;
+  size_t currentFileIndex{};
+
+  const std::string &getTitle() const
+  {
+    return tags[title].second;
+  }
+  const std::string &getArtist() const
+  {
+    return tags[artist].second;
+  }
+  const std::string &getAlbum() const
+  {
+    return tags[album].second;
+  }
+  const std::string &getTrack() const
+  {
+    return tags[track].second;
+  }
 };
 
 #endif /* MP3METADATA_H_ */

@@ -29,18 +29,20 @@ extern const char *rawvideoUrlDummy;
 extern "C" {
 #endif
 
-typedef struct MetadataPod
+typedef struct MetadataTags
 {
-  char *title;
-  char *artist;
-  char *album;
-  int track;
-} MetadataPod;
+  struct Tag
+  {
+    char *key;
+    char *value;
+  } *tags;
+  size_t tagsCount;
+} MetadataTags;
 
 int ffmpeg_main(int argc, char **argv);
 size_t get_audio_duration();
 int get_nb_output_streams();
-void get_mp3_metadata(MetadataPod *mp);
+void get_mp3_metadata(MetadataTags *mt);
 void do_ffmpeg_cleanup();
 
 #ifdef __cplusplus

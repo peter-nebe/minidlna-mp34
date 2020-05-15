@@ -58,15 +58,31 @@ bool FfmpegAdapter::hasActualOutput()
 
 void FfmpegAdapter::getMp3Metadata(Mp3Metadata &metadata)
 {
-  MetadataPod mp{};
-  get_mp3_metadata(&mp);
+  MetadataTags mt{};
+  get_mp3_metadata(&mt);
 
-  if(mp.title)
-    metadata.title = mp.title;
-  if(mp.artist)
-    metadata.artist = mp.artist;
-  if(mp.album)
-    metadata.album = mp.album;
-  if(mp.track > 0)
-    metadata.track = mp.track;
+  metadata.tags.reserve(mt.tagsCount + 2);
+  metadata.tags.push_back({});
+
+  if(!mt.tagsCount)
+    return;
+
+  for(size_t i = 0; i < mt.tagsCount; i++)
+  {
+    metadata.tags.push_back(make_pair(mt.tags[i].key, mt.tags[i].value));
+
+    const string &key = metadata.tags.back().first;
+    const size_t ind = i + 1;
+
+    if(key == "title")
+      metadata.title = ind;
+    else if(key == "artist")
+      metadata.artist = ind;
+    else if(key == "album")
+      metadata.album = ind;
+    else if(key == "track")
+      metadata.track = ind;
+  }
+
+  free(mt.tags);
 }

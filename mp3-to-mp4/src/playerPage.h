@@ -38,6 +38,9 @@ public:
   void progress(size_t seconds, size_t secondsTotal);
   QString toHtml() const;
   QImage render() const;
+
+private:
+  void setContentAlternative(const Mp3Metadata &metadata);
 };
 
 #endif /* PLAYERPAGE_H_ */

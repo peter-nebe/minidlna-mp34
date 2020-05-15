@@ -21,6 +21,7 @@
 #include "playerPage.h"
 #include "rendering.h"
 #include "config_mp34.h"
+#include <map>
 
 namespace
 {
@@ -55,21 +56,155 @@ PlayerPage::PlayerPage(const QString &html)
   setViewportSize(QSize(width, height));
 }
 
+namespace
+{
+  void setElementContent(QWebElement &element, const std::string &content)
+  {
+    element.setInnerXml(QString::fromStdString(content));
+  }
+  void setElementContent(const QWebElement &documentElement, const char *selector, const std::string &content)
+  {
+    documentElement.findFirst(selector).setInnerXml(QString::fromStdString(content));
+  }
+} // namespace
+
 void PlayerPage::setContent(const Mp3Metadata &mm)
 {
-  QWebElement docElem = mainFrame()->documentElement();
-  docElem.findFirst("#title").setInnerXml(QString::fromStdString(mm.title));
-  docElem.findFirst("#artist").setInnerXml(QString::fromStdString(mm.artist));
-  docElem.findFirst("#album").setInnerXml(QString::fromStdString(mm.album));
-  if(mm.track)
-    docElem.findFirst("#track").setInnerXml(QString::number(mm.track));
-  docElem.findFirst("#file").setInnerXml(QString::fromStdString(mm.file));
+  const QWebElement docElem = mainFrame()->documentElement();
+  setElementContent(docElem, "#title", mm.getTitle());
 
   if(!mm.albumImageFile.empty())
   {
-    docElem = docElem.findFirst("#albumImage");
-    docElem.setAttribute("src", QString::fromStdString(mm.albumImageFile));
-    docElem.setAttribute("class", "albumImage");
+    QWebElement elem = docElem.findFirst("#albumImage");
+    elem.setAttribute("src", QString::fromStdString(mm.albumImageFile));
+    elem.setAttribute("class", "albumImage");
+  }
+
+  QWebElement elem = docElem.findFirst("#artist");
+  if(elem.isNull())
+  {
+    // player template alternative
+    setContentAlternative(mm);
+    return;
+  }
+
+  setElementContent(elem, mm.getArtist());
+  setElementContent(docElem, "#album", mm.getAlbum());
+  setElementContent(docElem, "#track", mm.getTrack());
+  setElementContent(docElem, "#file", mm.fileList[mm.currentFileIndex]);
+}
+
+namespace
+{
+
+enum class TagId
+{
+  title,
+  artist,
+  album,
+  track,
+  albumArtist,
+  disc,
+  composer,
+  performer,
+  date,
+  genre,
+  language,
+  filename,
+  creationTime,
+  publisher,
+  copyright,
+  serviceName,
+  serviceProvider,
+  encodedBy,
+  encoder,
+  variantBitrate,
+  comment,
+  tagIdMax
+}; // TagId
+
+const char *const designation[]
+{
+  "Title:",
+  "Artist:",
+  "Album:",
+  "Track:",
+  "Album Artist:",
+  "Disc:",
+  "Composer:",
+  "Performer:",
+  "Date:",
+  "Genre:",
+  "Language:",
+  "Filename:",
+  "Creation Time:",
+  "Publisher:",
+  "Copyright:",
+  "Service Name:",
+  "Service Provider:",
+  "Encoded By:",
+  "Encoder:",
+  "Variant Bitrate:",
+  "Comment:"
+}; // designation
+
+} // namespace
+
+void PlayerPage::setContentAlternative(const Mp3Metadata &mm)
+{
+  static const std::map<std::string, TagId> tagNames
+  {
+    { "album", TagId::album },
+    { "album_artist", TagId::albumArtist },
+    { "artist", TagId::artist },
+    { "comment", TagId::comment },
+    { "composer", TagId::composer },
+    { "copyright", TagId::copyright },
+    { "creation_time", TagId::creationTime },
+    { "date", TagId::date },
+    { "disc", TagId::disc },
+    { "encoded_by", TagId::encodedBy },
+    { "encoder", TagId::encoder },
+    { "filename", TagId::filename },
+    { "genre", TagId::genre },
+    { "language", TagId::language },
+    { "performer", TagId::performer },
+    { "publisher", TagId::publisher },
+    { "service_name", TagId::serviceName },
+    { "service_provider", TagId::serviceProvider },
+    { "title", TagId::title },
+    { "track", TagId::track },
+    { "variant_bitrate", TagId::variantBitrate }
+  }; // tagNames
+
+  std::map<TagId, std::string> tagsToDisplay;
+  for(const auto &tag : mm.tags)
+  {
+    const auto tn = tagNames.find(tag.first);
+    if(tn != tagNames.end())
+      tagsToDisplay[tn->second] = tag.second;
+  }
+  tagsToDisplay.erase(TagId::title); // title was already set
+
+  const QWebElement docElem = mainFrame()->documentElement();
+  QWebElement elem = docElem.findFirst(".desig");
+
+  static_assert(std::size(designation) == static_cast<size_t>(TagId::tagIdMax));
+  for(const auto &tag : tagsToDisplay)
+  {
+    elem.setInnerXml(designation[static_cast<size_t>(tag.first)]);
+    elem = elem.nextSibling();
+    setElementContent(elem, tag.second);
+    elem = elem.nextSibling();
+  }
+
+  elem = docElem.findFirst("#fileList").firstChild();
+  for(size_t i = 0; i < mm.fileList.size(); i++)
+  {
+    setElementContent(elem, mm.fileList[i]);
+    if(i == mm.currentFileIndex)
+      elem.setAttribute("class", "currentFile");
+    elem = elem.nextSibling();
   }
 }
 
