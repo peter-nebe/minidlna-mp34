@@ -77,9 +77,11 @@ int MpxTool::convertFolder(const string &folder)
     ++currentMp3FileIndex;
   }
 
-  fs::path::iterator last = --fs::path(folder).end();
-  if(folder.back() == '/')
-    --last;
+  fs::path folderPath(folder);
+  fs::path::iterator last = --folderPath.end();
+  if(folder.back() == '/') // If there is a directory separator after the last file-name in the path,
+    --last;                // the last element before the end iterator is an empty element.
+                           // (see https://en.cppreference.com/w/cpp/filesystem/path/begin, "4)" )
 
   const int err = concatenate(last->string() + ".mp4");
   if(err)
