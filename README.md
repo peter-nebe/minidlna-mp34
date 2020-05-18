@@ -19,7 +19,14 @@ ffmpeg-4.2.2
 minidlna-1.2.1
 minidlna-mp34
 ```
-4. Enter the following commands:
+4. Depending on your system, some paths may need to be adjusted. Here are **examples** of the paths in question:
+ - in script *mp3-to-mp4/src/CMakeLists.txt*:\
+ ```/usr/include/x86_64-linux-gnu/qt5```
+ - in script *minidlna-mp34.service*:\
+ ```ExecStart=/usr/local/bin/minidlna-mp34 -S -f /usr/local/etc/minidlna-mp34/minidlna-mp34.conf ...```
+ - in script *post_install.sh*:\
+ ```systemctl enable /usr/local/etc/systemd/system/minidlna-mp34.service```
+5. Now enter the following commands:
 ```
 cd ffmpeg-4.2.2
 ./configure
@@ -31,13 +38,14 @@ make
 cd mp3-to-mp4/src
 cmake .
 make
-make install
+sudo make install
 cd ../..
-make install
+sudo make install
 ```
-5. Run *post_install.sh* if it wasn't done automatically.
-6. Follow the general configuration instructions for MiniDLNA.
-7. If you prefer the player template alternative, rename the folders:
+6. Run *post_install.sh* if it wasn't done automatically.
+7. Follow the general configuration instructions for MiniDLNA.
+
+If you prefer the player template alternative, rename the folders:
 - ```playerTemplate``` to ```playerTemplate.default```
 - ```playerTemplate (alternative)``` to ```playerTemplate```
 
