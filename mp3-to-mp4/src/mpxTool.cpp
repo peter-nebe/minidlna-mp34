@@ -181,7 +181,7 @@ int MpxTool::concatenate(const string &outMp4File) const
 
   ofstream concatList(concatListName);
   for(const auto &file : mp4Files)
-    concatList << "file '" << file << "'" << endl;
+    concatList << "file " << ffmpegQuoted(file) << endl;
   concatList.close();
 
   const vector<string> args

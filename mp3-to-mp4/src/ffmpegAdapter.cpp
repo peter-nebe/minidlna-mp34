@@ -21,6 +21,7 @@
 #include "ffmpegAdapter.h"
 #include "ffmpeg/ffmpeg_lib.h"
 #include "mainArgs.h"
+#include <sstream>
 using namespace std;
 
 FfmpegAdapter FfmpegAdapter::inst;
@@ -85,4 +86,21 @@ void FfmpegAdapter::getMp3Metadata(Mp3Metadata &metadata)
   }
 
   free(mt.tags);
+}
+
+string ffmpegQuoted(const string &str)
+{
+  const char delim = '\'';
+  ostringstream oss;
+
+  oss << delim;
+  for(char c : str)
+  {
+    if(c == delim)
+      oss << "'\\'";
+    oss << c;
+  }
+  oss << delim;
+
+  return oss.str();
 }

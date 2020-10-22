@@ -47,4 +47,6 @@ private:
   static FfmpegAdapter inst;
 };
 
+std::string ffmpegQuoted(const std::string &str);
+
 #endif /* FFMPEGADAPTER_H_ */
