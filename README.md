@@ -49,5 +49,11 @@ If you prefer the player template alternative, rename the folders:
 - ```playerTemplate``` to ```playerTemplate.default```
 - ```playerTemplate (alternative)``` to ```playerTemplate```
 
+#### Terms of Use
+- For private use only
+- Pay attention to the copyright!
+- Note the patent law!
+- **Compliance with legal regulations is your own responsibility.**
+
 ###### Sample output from the media server:
 [![alt text](sample.png "Sample output from the media server")](https://www.youtube.com/watch?v=HVl2U0VPAU0)
