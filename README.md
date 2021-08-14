@@ -50,9 +50,9 @@ If you prefer the player template alternative, rename the folders:
 - ```playerTemplate (alternative)``` to ```playerTemplate```
 
 #### Terms of Use
-- For private use only
-- Pay attention to the copyright!
-- Note the patent law!
+- **minidlna-mp34** may only be used privately and non-commercially.
+- Pay attention to the copyright of the processed media!
+- Note the patent law of the technologies used!
 - **Compliance with legal regulations is your own responsibility.**
 
 ###### Sample output from the media server:
