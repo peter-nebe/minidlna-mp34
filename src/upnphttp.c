@@ -1848,14 +1848,14 @@ static void *convertMp3ToMp4(void *arg)
   if(access(mp3path, F_OK))
     strcat(mp3path, ".mp3"); // not a folder
 
-  DPRINTF(E_INFO, L_HTTP, "Converting '%s' to '%s'\n", mp3path, mp4path);
+  DPRINTF(E_INFO, L_HTTP, "Converting \"%s\" to \"%s\"\n", mp3path, mp4path);
 
   char *const pathCopy = strdup(mp4path);
   char *const mp4dir = dirname(pathCopy);
   make_dir(mp4dir, S_IRWXU|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH);
 
   char cmd[PATH_MAX * 2];
-  snprintf(cmd, sizeof cmd, "cd '%s' && mp3-to-mp4 '%s'", mp4dir, mp3path);
+  snprintf(cmd, sizeof cmd, "cd \"%s\" && mp3-to-mp4 \"%s\"", mp4dir, mp3path);
   const int err = system(cmd);
   if(err)
     DPRINTF(E_WARN, L_HTTP, "Error %d executing command %s\n", err, cmd);
@@ -1866,7 +1866,7 @@ static void *convertMp3ToMp4(void *arg)
   struct stat file = { 0 };
   if(stat(mp4path, &file))
   {
-    DPRINTF(E_WARN, L_HTTP, "Error accessing '%s'\n", mp4path);
+    DPRINTF(E_WARN, L_HTTP, "Error accessing \"%s\"\n", mp4path);
   }
   else
   {
